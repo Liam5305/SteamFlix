@@ -45,6 +45,22 @@ function Browse() {
     (_, i) => currentYear - i
   );
 
+  useEffect(() => {
+    const fetchFilters = async () => {
+      try {
+        const [genresData, platformsData] = await Promise.all([
+          fetchGames('/genres'),
+          fetchGames('/platforms')
+        ]);
+        setGenres(genresData.results || []);
+        setPlatforms(platformsData.results || []);
+      } catch (err) {
+        console.error('Error fetching filters:', err);
+      }
+    };
+    fetchFilters();
+  }, []);
+
   // Fetch Genre and Platforms
   useEffect(() => {
     const fetchFilteredGames = async () => {
@@ -55,7 +71,7 @@ function Browse() {
     
         const params = {
           ordering: sortBy,
-          page_size: 20,
+          page_size: 30,
           page: page,
           search: searchTerm,
           search_exact: false,  // Changed from search_precise
@@ -89,7 +105,7 @@ function Browse() {
     };
 
     fetchFilteredGames();
-  }, [selectedGenre, selectedPlatform, selectedYear, sortBy, page]);
+  }, [selectedGenre, selectedPlatform, selectedYear, sortBy, page, searchParams]);
 
   const handleGenreChange = (e) => {
     setSelectedGenre(e.target.value);
