@@ -29,8 +29,10 @@ function Browse() {
   const getSearchTerms = (searchTerm) => {
     const lowerSearch = searchTerm.toLowerCase();
     for (const [game, aliases] of Object.entries(GAME_ALIASES)) {
-      if (aliases.some(alias => lowerSearch.includes(alias)) || 
-          lowerSearch.includes(game)) {
+      if (
+        aliases.some((alias) => lowerSearch.includes(alias)) ||
+        lowerSearch.includes(game)
+      ) {
         return aliases;
       }
     }
@@ -48,13 +50,13 @@ function Browse() {
     const fetchFilters = async () => {
       try {
         const [genresData, platformsData] = await Promise.all([
-          fetchGames('/genres'),
-          fetchGames('/platforms')
+          fetchGames("/genres"),
+          fetchGames("/platforms"),
         ]);
         setGenres(genresData.results || []);
         setPlatforms(platformsData.results || []);
       } catch (err) {
-        console.error('Error fetching filters:', err);
+        console.error("Error fetching filters:", err);
       }
     };
     fetchFilters();
@@ -65,46 +67,56 @@ function Browse() {
     const fetchFilteredGames = async () => {
       setIsLoading(true);
       try {
-        const searchTerm = searchParams.get('search');
-        console.log('Searching for:', searchTerm); // Debug log
-    
+        const searchTerm = searchParams.get("search");
+        console.log("Searching for:", searchTerm); // Debug log
+
         const params = {
           ordering: sortBy,
           page_size: 30,
           page: page,
           search: searchTerm,
-          search_exact: false,  // Changed from search_precise
-          parent_platforms: '1,2,3', // Include major platforms
+          search_exact: true, // Changed from search_precise
+          parent_platforms: "1,2,3", // Include major platforms
         };
-    
+
         if (selectedGenre) params.genres = selectedGenre;
         if (selectedPlatform) params.platforms = selectedPlatform;
-        if (selectedYear) params.dates = `${selectedYear}-01-01,${selectedYear}-12-31`;
-    
-        const data = await fetchGames('/games', params);
-        console.log('API Response:', data); // Debug log to see what the API returns
-    
+        if (selectedYear)
+          params.dates = `${selectedYear}-01-01,${selectedYear}-12-31`;
+
+        const data = await fetchGames("/games", params);
+        console.log("API Response:", data); // Debug log to see what the API returns
+
         if (!data.results?.length && searchTerm) {
           // Try alternative search if no results
           const alternativeParams = {
             ...params,
-            search: searchTerm.toLowerCase().includes('call of duty') ? 'cod' : searchTerm
+            search: searchTerm.toLowerCase().includes("call of duty")
+              ? "cod"
+              : searchTerm,
           };
-          const alternativeData = await fetchGames('/games', alternativeParams);
+          const alternativeData = await fetchGames("/games", alternativeParams);
           setGames(alternativeData.results || []);
         } else {
           setGames(data.results || []);
         }
       } catch (err) {
-        setError('Failed to load games');
-        console.error('Error:', err);
+        setError("Failed to load games");
+        console.error("Error:", err);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchFilteredGames();
-  }, [selectedGenre, selectedPlatform, selectedYear, sortBy, page, searchParams]);
+  }, [
+    selectedGenre,
+    selectedPlatform,
+    selectedYear,
+    sortBy,
+    page,
+    searchParams,
+  ]);
 
   const handleGenreChange = (e) => {
     setSelectedGenre(e.target.value);
@@ -142,7 +154,9 @@ function Browse() {
       <div className="container mx-auto px-4 py-8">
         {/* Filters Section */}
         <div className="mb-8 bg-gray-800 p-6 rounded-lg">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="hidden md:grid md:grid-cols-4 md:gap-4">
+            {" "}
+            {/* Desktop View */}
             {/* Genre Filter */}
             <div>
               <label className="block text-sm font-medium mb-1">Genre</label>
@@ -159,7 +173,6 @@ function Browse() {
                 ))}
               </select>
             </div>
-
             {/* Platform Filter */}
             <div>
               <label className="block text-sm font-medium mb-1">Platform</label>
@@ -176,7 +189,6 @@ function Browse() {
                 ))}
               </select>
             </div>
-
             <div>
               <label className="block text-sm font-medium mb-1">
                 Release Year
@@ -194,7 +206,6 @@ function Browse() {
                 ))}
               </select>
             </div>
-
             {/* Sort Options */}
             <div>
               <label className="block text-sm font-medium mb-1">Sort By</label>
@@ -202,6 +213,75 @@ function Browse() {
                 value={sortBy}
                 onChange={handleSortChange}
                 className="w-full bg-gray-700 text-white rounded p-1"
+              >
+                <option value="-rating">Rating (High to Low)</option>
+                <option value="rating">Rating (Low to High)</option>
+                <option value="-released">Release Date (Newest)</option>
+                <option value="released">Release Date (Oldest)</option>
+                <option value="-metacritic">Metacritic (High to Low)</option>
+                <option value="metacritic">Metacritic (Low to High)</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Mobile Filters */}
+          <div className="md:hidden grid grid-cols-1 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Genre</label>
+              <select
+                value={selectedGenre}
+                onChange={handleGenreChange}
+                className="w-full bg-gray-700 text-white rounded p-2"
+              >
+                <option value="">All Genres</option>
+                {genres.map((genre) => (
+                  <option key={genre.id} value={genre.id}>
+                    {genre.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">Platform</label>
+              <select
+                value={selectedPlatform}
+                onChange={handlePlatformChange}
+                className="w-full bg-gray-700 text-white rounded p-2"
+              >
+                <option value="">All Platforms</option>
+                {platforms.map((platform) => (
+                  <option key={platform.id} value={platform.id}>
+                    {platform.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Release Year
+              </label>
+              <select
+                value={selectedYear}
+                onChange={handleYearChange}
+                className="w-full bg-gray-700 text-white rounded p-2"
+              >
+                <option value="">All Years</option>
+                {years.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">Sort By</label>
+              <select
+                value={sortBy}
+                onChange={handleSortChange}
+                className="w-full bg-gray-700 text-white rounded p-2"
               >
                 <option value="-rating">Rating (High to Low)</option>
                 <option value="rating">Rating (Low to High)</option>
@@ -257,24 +337,30 @@ function Browse() {
             </div>
 
             {/* Pagination */}
-            <div className="mt-8 flex flex-col sm:flex-row justify-center">
-              <button
-                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-                disabled={page === 1}
-                className="bg-gray-700 text-white px-4 py-2 rounded-l hover:bg-gray-600 transition mb-2 sm:mb-0"
-              >
-                Previous
-              </button>
-              <span className="bg-gray-700 text-white px-4 py-2">
-                Page {page}
-              </span>
-              <button
-                onClick={() => setPage((prev) => prev + 1)}
-                className="bg-gray-700 text-white px-4 py-2 rounded-r hover:bg-gray-600 transition"
-              >
-                Next
-              </button>
-            </div>
+            {games.length > 0 ? (
+              <div className="mt-8 flex md:flex-row flex-col justify-center items-center gap-2">
+                <button
+                  onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={page === 1}
+                  className="w-full md:w-auto bg-gray-700 text-white px-4 py-2 rounded-l hover:bg-gray-600 transition"
+                >
+                  Previous
+                </button>
+                <span className="bg-gray-700 text-white px-4 py-2">
+                  Page {page}
+                </span>
+                <button
+                  onClick={() => setPage((prev) => prev + 1)}
+                  className="w-full md:w-auto bg-gray-700 text-white px-4 py-2 rounded-r hover:bg-gray-600 transition"
+                >
+                  Next
+                </button>
+              </div>
+            ) : (
+              <div className="mt-8 text-center text-gray-400">
+                No games found with these filters
+              </div>
+            )}
           </>
         )}
       </div>

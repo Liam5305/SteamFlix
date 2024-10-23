@@ -1,5 +1,3 @@
-// src/services/storeApis.js
-
 export const getUserLocale = () => {
   const browserLocale = navigator.language || 'en-GB';
   const currency = new Intl.NumberFormat(browserLocale, { 
@@ -28,6 +26,62 @@ export const STORE_INFO = {
   13: { name: 'Epic Games Store', icon: 'https://www.cheapshark.com/img/stores/icons/13.png' },
   15: { name: 'Fanatical', icon: 'https://www.cheapshark.com/img/stores/icons/15.png' },
 };
+
+// Add exclusive games data
+const EXCLUSIVE_GAMES = {
+  'World of Warcraft' : {
+    exclusive: true,
+    store: {
+      name: 'Battle.net',
+      icon: '../assets/Bnet.png',
+      url: 'https://worldofwarcraft.blizzard.com/en-gb/',
+    }
+  },
+  'League of Legends': {
+    exclusive: true,
+    store: {
+      name: 'Riot Games',
+      icon: '/store-icons/riot.png',
+      url: 'https://www.leagueoflegends.com',
+    }
+  }
+};
+
+// New function to fetch Game Pass games
+async function fetchGamePassGames() {
+  try {
+    const response = await fetch('https://catalog.gamepass.com/sigls/v2?id=fdd9e2a7-0fee-49f6-ad69-4354098401ff&language=en-us&market=US');
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Game Pass API Error:', error);
+    return null;
+  }
+}
+
+// Helper function to normalize game titles
+function normalizeGameTitle(title) {
+  return title.toLowerCase()
+    .replace(/[^a-z0-9\s]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// Check if game is on Game Pass
+async function checkGamePassAvailability(gameTitle) {
+  try {
+    const gamePassGames = await fetchGamePassGames();
+    if (!gamePassGames) return false;
+
+    const normalizedSearchTitle = normalizeGameTitle(gameTitle);
+    return gamePassGames.some(game => 
+      normalizeGameTitle(game.name) === normalizedSearchTitle
+    );
+  } catch (error) {
+    console.error('Error checking Game Pass availability:', error);
+    return false;
+  }
+}
 
 export const fetchCheapSharkPrices = async (gameTitle) => {
   const { currencyCode, format } = getUserLocale();
@@ -59,6 +113,18 @@ export const getAllStorePrices = async (gameTitle, steamAppId) => {
   const { format } = getUserLocale();
   
   try {
+    // Check if game is exclusive
+    const exclusiveGame = EXCLUSIVE_GAMES[gameTitle];
+    if (exclusiveGame) {
+      return [{
+        storeName: exclusiveGame.store.name,
+        storeIcon: exclusiveGame.store.icon,
+        price: 'Available Here',
+        url: exclusiveGame.store.url,
+        isExclusive: true
+      }];
+    }
+
     const [cheapSharkData, steamData] = await Promise.all([
       fetchCheapSharkPrices(gameTitle),
       steamAppId ? fetchSteamPrice(steamAppId) : null
@@ -79,8 +145,8 @@ export const getAllStorePrices = async (gameTitle, steamAppId) => {
             storePrices.push({
               storeName: store.name,
               storeIcon: store.icon,
-              price: price, // Send raw number, let PriceDisplay handle formatting
-              retailPrice: retailPrice, // Send raw number, let PriceDisplay handle formatting
+              price: price,
+              retailPrice: retailPrice,
               savings: Math.round(deal.savings),
               url: `https://www.cheapshark.com/redirect?dealID=${deal.dealID}`,
               isOnSale: deal.savings > 0
@@ -90,14 +156,27 @@ export const getAllStorePrices = async (gameTitle, steamAppId) => {
       }
     }
 
-    // Add additional store data
-    storePrices.push({
-      storeName: 'Xbox Game Pass',
-      storeIcon: '/api/placeholder/32/32',
-      price: 'Included with subscription',
-      isSubscription: true,
-      url: 'https://www.xbox.com/xbox-game-pass',
-    });
+    // Check Game Pass availability
+    const isOnGamePass = await checkGamePassAvailability(gameTitle);
+    if (isOnGamePass) {
+      storePrices.push({
+        storeName: 'Xbox Game Pass',
+        storeIcon: '/api/placeholder/32/32',
+        price: 'Included with subscription',
+        isSubscription: true,
+        url: 'https://www.xbox.com/xbox-game-pass',
+      });
+    }
+
+    // Show message if no stores found
+    if (storePrices.length === 0) {
+      return [{
+        storeName: 'Not Available',
+        storeIcon: '/api/placeholder/32/32',
+        price: 'No store listings found',
+        isUnavailable: true
+      }];
+    }
 
     return storePrices;
   } catch (error) {

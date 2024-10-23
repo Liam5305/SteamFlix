@@ -84,7 +84,7 @@ function Home() {
     <div className="min-h-screen bg-gray-900">
       {/* Hero Section */}
       {featuredGame && (
-        <div className="relative h-[80vh] w-full">
+        <div className="relative h-[60vh] sm:h-[70vh] md:h-[80vh] w-full">
           <div className="absolute inset-0">
             <img 
               src={featuredGame.background_image}
@@ -94,11 +94,11 @@ function Home() {
             <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent" />
           </div>
 
-          <div className="relative pt-[20%] px-4 sm:px-8 md:px-16 z-10">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-yellow-400 mb-4">
+          <div className="relative pt-[30%] sm:pt-[25%] md:pt-[20%] px-4 sm:px-8 md:px-16 z-10">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-yellow-400 mb-2 md:mb-4 line-clamp-2">
               {featuredGame.name}
             </h1>
-            <div className="flex gap-2 flex-wrap items-center mb-6">
+            <div className="flex gap-2 flex-wrap items-center mb-4 md:mb-6 text-sm sm:text-base">
               {featuredGame.metacritic && (
                 <span className="text-green-500">
                   Metacritic: {featuredGame.metacritic}
@@ -111,9 +111,9 @@ function Home() {
             <div className="flex gap-2 flex-wrap">
               <button 
                 onClick={() => navigate(`/game/${featuredGame.id}`)}
-                className="bg-yellow-400 text-gray-800 px-4 py-2 rounded hover:bg-yellow-500 transition flex items-center gap-2"
+                className="bg-yellow-400 text-gray-800 px-3 sm:px-4 py-2 rounded text-sm sm:text-base hover:bg-yellow-500 transition flex items-center gap-2"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -121,7 +121,7 @@ function Home() {
               </button>
               <button 
                 onClick={() => navigate(`/game/${featuredGame.id}`)}
-                className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 transition"
+                className="bg-gray-800 text-white px-3 sm:px-4 py-2 rounded text-sm sm:text-base hover:bg-gray-700 transition"
               >
                 More Info
               </button>
@@ -131,7 +131,7 @@ function Home() {
       )}
 
       {/* Game Rows */}
-      <div className="px-4 sm:px-8 md:px-16 -mt-32 relative z-20 space-y-8 pb-16">
+      <div className="px-4 sm:px-8 md:px-16 -mt-20 sm:-mt-24 md:-mt-32 relative z-20 space-y-6 sm:space-y-8 pb-16">
         {popularGames.length > 0 && (
           <GameRow title="Popular Games" games={popularGames} />
         )}
@@ -151,9 +151,9 @@ function GameRow({ title, games }) {
   const navigate = useNavigate();
   
   return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-yellow-400">{title}</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+    <div className="space-y-3 sm:space-y-4">
+      <h2 className="text-xl sm:text-2xl font-bold text-yellow-400">{title}</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
         {games.map((game) => (
           <GameCard 
             key={game.id} 
@@ -176,22 +176,24 @@ function GameCard({ game, onClick }) {
       <img 
         src={game.background_image}
         alt={game.name}
-        className="w-full h-[150px] sm:h-[200px] object-cover rounded-md"
+        className="w-full h-[120px] xs:h-[140px] sm:h-[160px] md:h-[200px] object-cover rounded-md"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-md">
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity rounded-md">
         <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4">
-          <h3 className="text-white font-semibold text-sm sm:text-base">{game.name}</h3>
-          <div className="flex items-center gap-2 mt-1">
+          <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base line-clamp-1">{game.name}</h3>
+          <div className="flex items-center gap-2 mt-0.5 sm:mt-1">
             <span className="text-green-400 text-xs sm:text-sm">★ {game.rating}/5</span>
             {game.metacritic && (
-              <span className="text-yellow-400 text-xs sm:text-sm">Metacritic: {game.metacritic}</span>
+              <span className="text-yellow-400 text-xs sm:text-sm">
+                {game.metacritic}
+              </span>
             )}
           </div>
-          <div className="flex flex-wrap gap-2 mt-1">
+          <div className="hidden sm:flex flex-wrap gap-1 mt-1">
             {game.genres?.slice(0, 2).map(genre => (
               <span 
                 key={genre.id}
-                className="text-xs bg-gray-800 px-2 py-1 rounded-full text-gray-300"
+                className="text-[10px] sm:text-xs bg-gray-800 px-1.5 py-0.5 rounded-full text-gray-300"
               >
                 {genre.name}
               </span>
