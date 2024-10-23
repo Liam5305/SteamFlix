@@ -90,8 +90,8 @@ function GameDetails() {
                   Metacritic: {game.metacritic}
                 </span>
               )}
-              <span>Release Date: {new Date(game.released).toLocaleDateString()}</span>
-              <span>Rating: {game.rating}/5</span>
+              <span>Release Date: {new Date(game.released).toLocaleDateString()} Rating: {parseFloat(game.rating).toFixed(1)}/5</span>
+              {/* <span>Rating: {game.rating}/5</span> */}
             </div>
           </div>
         </div>

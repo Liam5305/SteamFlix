@@ -182,7 +182,7 @@ function GameCard({ game, onClick }) {
         <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4">
           <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base line-clamp-1">{game.name}</h3>
           <div className="flex items-center gap-2 mt-0.5 sm:mt-1">
-            <span className="text-green-400 text-xs sm:text-sm">★ {game.rating}/5</span>
+          <span className="text-green-400">★ {game.rating ? Math.round(game.rating * 10) / 10 : '0'}/5</span>
             {game.metacritic && (
               <span className="text-yellow-400 text-xs sm:text-sm">
                 {game.metacritic}

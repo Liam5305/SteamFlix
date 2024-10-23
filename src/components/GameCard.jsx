@@ -21,7 +21,7 @@ function GameCard({ game }) {
         <div className="absolute bottom-0 left-0 right-0 p-4">
           <h3 className="text-white font-semibold text-lg">{game.name}</h3>
           <div className="flex items-center gap-2 mt-2">
-            <span className="text-green-400 font-bold">★ {game.rating}/5</span>
+          <span className="text-green-400 text-xs sm:text-sm">★ {Number(game.rating).toFixed(1)}/5</span>
             {game.metacritic && (
               <span className="text-yellow-400 font-semibold">Metacritic: {game.metacritic}</span>
             )}
