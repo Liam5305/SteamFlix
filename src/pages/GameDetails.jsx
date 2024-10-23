@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { fetchGames } from '../utils/api';
 import { getAllStorePrices } from '../services/storeApis';
 import PriceDisplay from '../components/PriceDisplay';
@@ -236,16 +236,14 @@ function GameDetails() {
 
                   return (
                     <div key={platform.platform.id}>
-                      <h3 className="text-xl font-bold mb-2">PC Requirements</h3>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <h4 className="font-semibold">Minimum:</h4>
-                          {parseRequirements(platform.requirements.minimum)}
-                        </div>
-                        <div>
-                          <h4 className="font-semibold">Recommended:</h4>
-                          {parseRequirements(platform.requirements.recommended)}
-                        </div>
+                      <h3 className="text-xl font-bold mb-2">{platform.platform.name}</h3>
+                      <div>
+                        <strong>Minimum:</strong>
+                        {parseRequirements(platform.minimum)}
+                      </div>
+                      <div>
+                        <strong>Recommended:</strong>
+                        {parseRequirements(platform.recommended)}
                       </div>
                     </div>
                   );
@@ -253,8 +251,34 @@ function GameDetails() {
               </div>
             )}
           </div>
+
+          {/* Sidebar (can add more content later) */}
+          <div className="hidden lg:block bg-gray-800 rounded-lg p-6">
+            <h2 className="text-xl font-bold mb-4">Similar Games</h2>
+            {/* Placeholder for similar games */}
+            <p className="text-gray-400">You might also like these games.</p>
+          </div>
         </div>
       </div>
+
+      {/* Modal for Screenshot */}
+      {selectedImageIndex !== null && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70">
+          <div className="relative">
+            <img 
+              src={screenshots[selectedImageIndex].image}
+              alt={`Screenshot ${selectedImageIndex + 1}`}
+              className="max-w-full max-h-full"
+            />
+            <button
+              className="absolute top-2 right-2 text-white"
+              onClick={() => setSelectedImageIndex(null)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

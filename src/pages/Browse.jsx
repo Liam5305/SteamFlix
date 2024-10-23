@@ -257,11 +257,11 @@ function Browse() {
             </div>
 
             {/* Pagination */}
-            <div className="mt-8 flex justify-center">
+            <div className="mt-8 flex flex-col sm:flex-row justify-center">
               <button
                 onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                 disabled={page === 1}
-                className="bg-gray-700 text-white px-4 py-2 rounded-l hover:bg-gray-600 transition"
+                className="bg-gray-700 text-white px-4 py-2 rounded-l hover:bg-gray-600 transition mb-2 sm:mb-0"
               >
                 Previous
               </button>
