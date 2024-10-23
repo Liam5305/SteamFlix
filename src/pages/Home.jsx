@@ -64,7 +64,7 @@ function Home() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-white"></div>
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-yellow-400"></div>
       </div>
     );
   }
@@ -95,7 +95,7 @@ function Home() {
           </div>
 
           <div className="relative pt-[20%] px-16 z-10">
-            <h1 className="text-6xl font-bold text-white mb-4">
+            <h1 className="text-6xl font-bold text-yellow-400 mb-4">
               {featuredGame.name}
             </h1>
             <div className="flex gap-4 items-center mb-6">
@@ -111,7 +111,7 @@ function Home() {
             <div className="flex gap-4">
               <button 
                 onClick={() => navigate(`/game/${featuredGame.id}`)}
-                className="bg-red-600 text-white px-8 py-3 rounded hover:bg-red-700 transition flex items-center gap-2"
+                className="bg-yellow-400 text-gray-800 px-8 py-3 rounded hover:bg-yellow-400 transition flex items-center gap-2"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -152,7 +152,7 @@ function GameRow({ title, games }) {
   
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-white">{title}</h2>
+      <h2 className="text-2xl font-bold text-yellow-400">{title}</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {games.map((game) => (
           <GameCard 

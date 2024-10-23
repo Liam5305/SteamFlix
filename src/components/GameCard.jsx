@@ -10,20 +10,20 @@ function GameCard({ game }) {
   return (
     <div 
       onClick={handleClick}
-      className="relative group cursor-pointer"
+      className="relative group cursor-pointer rounded-md overflow-hidden shadow-lg transition-transform duration-300 transform hover:scale-105"
     >
       <img 
         src={game.background_image}
         alt={game.name}
-        className="w-full h-[200px] object-cover rounded-md transform transition-transform duration-300 group-hover:scale-105"
+        className="w-full h-[200px] object-cover"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-md">
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
         <div className="absolute bottom-0 left-0 right-0 p-4">
-          <h3 className="text-white font-semibold">{game.name}</h3>
+          <h3 className="text-white font-semibold text-lg">{game.name}</h3>
           <div className="flex items-center gap-2 mt-2">
-            <span className="text-green-400">★ {game.rating}/5</span>
+            <span className="text-green-400 font-bold">★ {game.rating}/5</span>
             {game.metacritic && (
-              <span className="text-yellow-400">Metacritic: {game.metacritic}</span>
+              <span className="text-yellow-400 font-semibold">Metacritic: {game.metacritic}</span>
             )}
           </div>
         </div>

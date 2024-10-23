@@ -25,7 +25,7 @@ function SearchBar() {
               placeholder="Search games..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-gray-800 text-white rounded-l-lg pl-3 pr-4 py-1.5 focus:outline-none"
+              className="w-full bg-gray-900 text-yellow-400 rounded-l-lg pl-3 pr-4 py-1.5 focus:outline-none focus:ring-2 focus:ring-yellow-300"
               autoFocus
             />
           )}
@@ -35,7 +35,7 @@ function SearchBar() {
             className={`p-1.5 ${isExpanded ? 'bg-gray-800 rounded-r-lg' : 'hover:bg-gray-800 rounded-lg'}`}
           >
             <svg 
-              className="h-5 w-5 text-gray-400"
+              className="h-5 w-5 text-yellow-400"
               fill="none" 
               stroke="currentColor" 
               viewBox="0 0 24 24"

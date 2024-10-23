@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchGames } from "../utils/api";
-
 import { useSearchParams } from "react-router-dom";
 
 function Browse() {
@@ -24,7 +23,7 @@ function Browse() {
     "grand theft auto": ["gta"],
     "player unknowns battlegrounds": ["pubg"],
     "the witcher": ["witcher"],
-    // Do I need more?
+    // Add more as needed
   };
 
   const getSearchTerms = (searchTerm) => {
@@ -248,60 +247,30 @@ function Browse() {
                           {game.metacritic}
                         </span>
                       )}
-                      <span className="text-gray-400 text-sm">
+                      <span className="text-sm">
                         {new Date(game.released).getFullYear()}
                       </span>
-                    </div>
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {game.genres?.slice(0, 2).map((genre) => (
-                        <span
-                          key={genre.id}
-                          className="text-xs bg-gray-700 px-2 py-1 rounded"
-                        >
-                          {genre.name}
-                        </span>
-                      ))}
                     </div>
                   </div>
                 </div>
               ))}
             </div>
 
-            {games.length === 0 && !isLoading && searchParams.get("search") && (
-              <div className="text-center py-12">
-                <h3 className="text-xl text-gray-400 mb-2">
-                  No games found for "{searchParams.get("search")}"
-                </h3>
-                <p className="text-gray-500 mb-4">Try searching for:</p>
-                <ul className="text-gray-400">
-                  <li>
-                    Alternative titles (e.g., "COD" instead of "Call of Duty")
-                  </li>
-                  <li>
-                    Specific game names (e.g., "Modern Warfare" or "Black Ops")
-                  </li>
-                  <li>Different spellings or formats</li>
-                </ul>
-              </div>
-            )}
-
             {/* Pagination */}
-            <div className="mt-8 flex justify-center gap-4">
+            <div className="mt-8 flex justify-center">
               <button
                 onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                 disabled={page === 1}
-                className={`px-4 py-2 rounded ${
-                  page === 1
-                    ? "bg-gray-700 cursor-not-allowed"
-                    : "bg-blue-600 hover:bg-blue-700"
-                }`}
+                className="bg-gray-700 text-white px-4 py-2 rounded-l hover:bg-gray-600 transition"
               >
                 Previous
               </button>
-              <span className="px-4 py-2 bg-gray-800 rounded">Page {page}</span>
+              <span className="bg-gray-700 text-white px-4 py-2">
+                Page {page}
+              </span>
               <button
                 onClick={() => setPage((prev) => prev + 1)}
-                className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
+                className="bg-gray-700 text-white px-4 py-2 rounded-r hover:bg-gray-600 transition"
               >
                 Next
               </button>
