@@ -36,6 +36,12 @@ function Navbar() {
             >
               Browse
             </Link>
+            <Link
+              to="/account"
+              className="text-sm font-medium text-yellow-400 hover:text-yellow-300 transition-colors"
+            >
+              Account
+            </Link>
           </div>
         </div>
 
@@ -63,6 +69,12 @@ function Navbar() {
               >
                 Browse
               </Link>
+              <Link
+              to="/account"
+              className="text-sm font-medium text-yellow-400 hover:text-yellow-300 transition-colors"
+            >
+              Account
+            </Link>
             </div>
           </div>
           <div className="ml-auto">

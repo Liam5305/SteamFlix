@@ -3,6 +3,8 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Browse from './pages/Browse';
 import GameDetails from './pages/GameDetails';
+import Account from './components/Login';
+import Register from './components/Register';
 
 function App() {
   return (
@@ -13,6 +15,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/browse" element={<Browse />} />
           <Route path="/game/:id" element={<GameDetails />} />
+          <Route path="/account" element={<Account />} />
         </Routes>
       </BrowserRouter>
     </div>
