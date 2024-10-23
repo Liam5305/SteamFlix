@@ -1,4 +1,3 @@
-// If you have a separate GameCard component file (src/components/GameCard.jsx):
 import { useNavigate } from 'react-router-dom';
 
 function GameCard({ game }) {
