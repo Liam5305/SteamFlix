@@ -16,6 +16,7 @@ function App() {
           <Route path="/browse" element={<Browse />} />
           <Route path="/game/:id" element={<GameDetails />} />
           <Route path="/account" element={<Account />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </BrowserRouter>
     </div>
