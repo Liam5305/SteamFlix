@@ -1,4 +1,3 @@
-// src/components/PriceDisplay.jsx
 import React from 'react';
 
 export function PriceDisplay({ price, isOriginal = false }) {

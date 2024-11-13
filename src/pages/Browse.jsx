@@ -23,7 +23,6 @@ function Browse() {
     "grand theft auto": ["gta"],
     "player unknowns battlegrounds": ["pubg"],
     "the witcher": ["witcher"],
-    // Add more as needed
   };
 
   const getSearchTerms = (searchTerm) => {
@@ -39,7 +38,6 @@ function Browse() {
     return [searchTerm];
   };
 
-  // Generate year filter
   const currentYear = new Date().getFullYear();
   const years = Array.from(
     { length: currentYear - 1990 + 1 },
